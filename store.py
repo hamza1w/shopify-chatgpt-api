@@ -62,7 +62,4 @@ def chat_with_gpt():
 def home():
     return jsonify({"message": "Welcome to the Shopify & OpenAI API!"})
 
-# Run App
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 
