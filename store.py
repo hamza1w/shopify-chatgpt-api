@@ -33,7 +33,7 @@ def generate_fitness_plan(user_data):
     - **Email:** {user_data['email']}
     - **Fitness Goal:** {user_data['fitness_goal']}
     - **Where do you train:** {user_data['training_location']}
-    - **Available Equipment (if any):** {user_data['equipment'] or 'None'}
+    - **Available Equipment (if any):** {user_data.get('equipment', 'None')}
     - **Current Weight:** {user_data['weight']} kg
     - **Fitness Level:** {user_data['fitness_level']}
     - **Diet Level:** {user_data['diet_level']}
@@ -41,7 +41,7 @@ def generate_fitness_plan(user_data):
     - **Age:** {user_data['age']}
     - **Average Hours of Sleep:** {user_data['sleep_hours']} hours
     - **How many times do you train per week:** {user_data['training_frequency']}
-    - **Additional Information:** {user_data['additional_info'] or 'None'}
+    - **Additional Information:** {user_data.get('additional_info', 'None')}
 
     - **Fitness Plan Format:**
       1. Daily workout plan (including exercise names, sets, reps, and rest time)
@@ -52,8 +52,10 @@ def generate_fitness_plan(user_data):
     try:
         response = openai.ChatCompletion.create(
             model="gpt-4o-mini",
-            messages=[{"role": "system", "content": "You are a professional fitness coach and nutritionist."},
-                      {"role": "user", "content": prompt}],
+            messages=[
+                {"role": "system", "content": "You are a professional fitness coach and nutritionist."},
+                {"role": "user", "content": prompt}
+            ],
             max_tokens=1500
         )
         return response.choices[0].message["content"]
@@ -80,6 +82,11 @@ def send_email(recipient_email, fitness_plan):
     except Exception as e:
         print(f"Error sending email: {e}")
         return False
+
+@app.route("/", methods=["GET"])
+def home():
+    """Home route to check if the API is running."""
+    return "The API is running!", 200
 
 @app.route("/generate_plan", methods=["POST"])
 def generate_plan():
@@ -112,5 +119,5 @@ def generate_plan():
         return jsonify({"error": "Failed to send email"}), 500
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 10000))  # Ensure it's running on the correct port
     app.run(host="0.0.0.0", port=port)
