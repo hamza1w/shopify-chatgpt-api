@@ -64,7 +64,7 @@ def generate_fitness_plan(user_data):
         return None
 
 def send_email(recipient_email, fitness_plan):
-    """Sends the generated fitness plan via email."""
+    """Sends the generated fitness plan via email"""
     msg = MIMEMultipart()
     msg["From"] = os.getenv("SENDER_EMAIL")
     msg["To"] = recipient_email
@@ -114,4 +114,5 @@ def generate_plan_route():
 @app.route("/", methods=["GET"])
 def home():
     return jsonify({"message": "Welcome to the Shopify & OpenAI API!"})
+
 
